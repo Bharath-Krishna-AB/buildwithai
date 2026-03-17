@@ -104,7 +104,7 @@ export function Hero() {
           >
             <h2 className="text-3xl font-black text-g-dark tracking-tight mb-2 uppercase">Build the <br/><span className="text-g-blue text-4xl">Future.</span></h2>
             <p className="text-base text-g-dark font-bold leading-relaxed border-l-4 border-g-red pl-3">
-              An intensive 8-hour hackathon bringing together creative minds and cutting-edge Google technologies. Experience building with AI offline.
+              An exclusive gathering bringing together creative minds and cutting-edge Google AI technologies. Experience the impossible, offline.
             </p>
           </motion.div>
 

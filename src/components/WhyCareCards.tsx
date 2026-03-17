@@ -23,8 +23,8 @@ const cards = [
     bg: "bg-g-red",
   },
   {
-    title: "High-Speed Execution",
-    description: "Thrive under pressure. Condense months of scattered learning into a single focused 8-hour sprint of pure building.",
+    title: "Exclusive Tech Access",
+    description: "Get hands-on with the bleeding-edge of Google AI models. Don't just follow the technological trend—be the one to define it.",
     icon: Zap,
     bg: "bg-g-yellow",
   }

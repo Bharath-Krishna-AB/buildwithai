@@ -3,7 +3,7 @@ import { Hero } from "@/components/Hero";
 import { WhatIsThis } from "@/components/WhatIsThis";
 import { WhyCareCards } from "@/components/WhyCareCards";
 import { WhatYouGet } from "@/components/WhatYouGet";
-import { EventFormat } from "@/components/EventFormat";
+import { EventDayFlow } from "@/components/EventDayFlow";
 import { SelectionProcess } from "@/components/SelectionProcess";
 import { Partners } from "@/components/Partners";
 import { FinalCTA } from "@/components/FinalCTA";
@@ -16,8 +16,8 @@ export default function Home() {
       <WhatIsThis />
       <WhyCareCards />
       <WhatYouGet />
-      <EventFormat />
       <SelectionProcess />
+      <EventDayFlow />
       <Partners />
       <FinalCTA />
       

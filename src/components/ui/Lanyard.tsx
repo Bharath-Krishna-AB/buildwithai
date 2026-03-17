@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import {
@@ -139,6 +139,86 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
     [0, 1.45, 0]
   ]);
 
+  // --- Dynamic Google ID Texture Generation ---
+  // Create a memoized canvas texture so it only regenerates if needed.
+  const googleIdTexture = React.useMemo(() => {
+    // 1. Create offscreen canvas (Badge proportions are typically ~ 2:3, e.g., 600x900)
+    const canvas = document.createElement("canvas");
+    canvas.width = 1024;
+    canvas.height = 1024; // The raw UV map is likely a square box atlas
+    const ctx = canvas.getContext("2d");
+    
+    if (ctx) {
+      // 2. Base ID Card Background
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // We need to map to the UV coordinates of the GLTF. 
+      // Typically the front face occupies a specific rectangle in the texture atlas.
+      // Assuming a generic full-coverage mapping for the front face:
+      
+      // Google Core Colors
+      const gBlue = "#4285F4";
+      const gRed = "#DB4437";
+      const gYellow = "#F4B400";
+      const gGreen = "#0F9D58";
+      const gDark = "#1f2937"; // text-g-dark approx
+
+      // Draw Top Google Color Bar (Simulating the punch hole area/branding)
+      const barHeight = 80;
+      const sectionWidth = canvas.width / 4;
+      ctx.fillStyle = gBlue;   ctx.fillRect(0, 0, sectionWidth, barHeight);
+      ctx.fillStyle = gRed;    ctx.fillRect(sectionWidth, 0, sectionWidth, barHeight);
+      ctx.fillStyle = gYellow; ctx.fillRect(sectionWidth * 2, 0, sectionWidth, barHeight);
+      ctx.fillStyle = gGreen;  ctx.fillRect(sectionWidth * 3, 0, sectionWidth, barHeight);
+
+      // Draw "Google Developer" or "MAKE WITH AI" Header
+      ctx.fillStyle = gDark;
+      ctx.font = "bold 60px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("GOOGLE DEVELOPER", canvas.width / 2, 180);
+
+      // Draw Avatar Placeholder (Circle)
+      const avatarY = 400;
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, avatarY, 150, 0, Math.PI * 2);
+      ctx.fillStyle = "#f3f4f6"; // Light gray bg
+      ctx.fill();
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = gBlue;
+      ctx.stroke();
+      
+      // Draw Avatar Inner "G" or Icon logic (Simplified to a stylized letter)
+      ctx.fillStyle = gDark;
+      ctx.font = "bold 140px Inter, sans-serif";
+      ctx.fillText("G", canvas.width / 2, avatarY + 50);
+
+      // Draw Name
+      ctx.fillStyle = gDark;
+      ctx.font = "bold 80px Inter, sans-serif";
+      ctx.fillText("MAKE WITH AI", canvas.width / 2, 700);
+
+      // Draw Title / Role
+      ctx.fillStyle = "#6b7280"; // gray-500
+      ctx.font = "50px Inter, sans-serif";
+      ctx.fillText("VIP PARTICIPANT", canvas.width / 2, 770);
+
+      // Draw Bottom Color Bar for extra Google feel
+      const bottomBarY = canvas.height - 40;
+      ctx.fillStyle = gGreen;  ctx.fillRect(0, bottomBarY, sectionWidth, 40);
+      ctx.fillStyle = gYellow; ctx.fillRect(sectionWidth, bottomBarY, sectionWidth, 40);
+      ctx.fillStyle = gRed;    ctx.fillRect(sectionWidth * 2, bottomBarY, sectionWidth, 40);
+      ctx.fillStyle = gBlue;   ctx.fillRect(sectionWidth * 3, bottomBarY, sectionWidth, 40);
+    }
+
+    // 3. Convert to THREE.CanvasTexture
+    const generatedTex = new THREE.CanvasTexture(canvas);
+    generatedTex.colorSpace = THREE.SRGBColorSpace;
+    generatedTex.flipY = false; // Important for GLTF standard UVs
+    return generatedTex;
+  }, []);
+  // ---------------------------------------------
+
   useEffect(() => {
     if (hovered) {
       document.body.style.cursor = dragged ? 'grabbing' : 'grab';
@@ -223,12 +303,12 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
           >
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial
-                map={materials.base.map}
+                map={googleIdTexture}
                 map-anisotropy={16}
                 clearcoat={isMobile ? 0 : 1}
                 clearcoatRoughness={0.15}
                 roughness={0.9}
-                metalness={0.8}
+                metalness={0.1} // reduced metalness so white canvas looks like white plastic, not chrome
               />
             </mesh>
             <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
@@ -241,7 +321,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
         <meshLineGeometry />
         {/* @ts-ignore */}
         <meshLineMaterial
-          color="white"
+          color="#4285F4" // Google Blue for the Lanyard rope
           depthTest={false}
           resolution={isMobile ? [1000, 2000] : [1000, 1000]}
           useMap
