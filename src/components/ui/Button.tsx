@@ -1,0 +1,58 @@
+"use client";
+
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+
+type ButtonProps = {
+  children: React.ReactNode;
+  variant?: "primary" | "secondary" | "yellow" | "blue" | "red" | "green";
+  className?: string;
+  href?: string;
+  [key: string]: any; // Allow spreading standard HTML attributes safely
+};
+
+export function Button({
+  children,
+  variant = "primary",
+  className,
+  href,
+  ...props
+}: ButtonProps) {
+  const baseStyles = "relative inline-flex items-center justify-center px-8 py-4 rounded-full font-bold tracking-wide transition-all duration-200 border-2 border-g-dark flex-shrink-0 cursor-pointer text-center";
+  
+  const variants = {
+    primary: "bg-g-dark text-white hover:-translate-y-1 hover:shadow-brutal",
+    secondary: "bg-white text-g-dark hover:-translate-y-1 hover:bg-g-light-gray hover:shadow-brutal",
+    yellow: "bg-g-yellow text-g-dark hover:-translate-y-1 hover:shadow-brutal",
+    blue: "bg-g-blue text-white hover:-translate-y-1 hover:shadow-brutal text-lg",
+    red: "bg-g-red text-white hover:-translate-y-1 hover:shadow-brutal",
+    green: "bg-g-green text-white hover:-translate-y-1 hover:shadow-brutal",
+  };
+
+  const content = (
+    <span className="relative z-10">{children}</span>
+  );
+
+  if (href) {
+    return (
+      <motion.a
+        whileTap={{ scale: 0.98, translateY: 0, boxShadow: "0px 0px 0px 0px var(--color-g-dark)" }}
+        href={href}
+        className={cn(baseStyles, variants[variant], className)}
+        {...props}
+      >
+        {content}
+      </motion.a>
+    );
+  }
+
+  return (
+    <motion.button
+      whileTap={{ scale: 0.98, translateY: 0, boxShadow: "0px 0px 0px 0px var(--color-g-dark)" }}
+      className={cn(baseStyles, variants[variant], className)}
+      {...props}
+    >
+      {content}
+    </motion.button>
+  );
+}
