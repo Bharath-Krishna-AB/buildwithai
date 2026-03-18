@@ -138,84 +138,57 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
     [0, 1.45, 0]
   ]);
 
-  // --- Dynamic Google ID Texture Generation ---
-  // Create a memoized canvas texture so it only regenerates if needed.
-  const googleIdTexture = React.useMemo(() => {
-    // 1. Create offscreen canvas (Badge proportions are typically ~ 2:3, e.g., 600x900)
-    const canvas = document.createElement("canvas");
-    canvas.width = 1024;
-    canvas.height = 1024; // The raw UV map is likely a square box atlas
-    const ctx = canvas.getContext("2d");
-    
-    if (ctx) {
-      // 2. Base ID Card Background
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // --- Load ID Texture ---
+  const idTexture = useTexture('/ID.jpg');
+  const [doubleSidedTexture, setDoubleSidedTexture] = useState<THREE.CanvasTexture | null>(null);
 
-      // We need to map to the UV coordinates of the GLTF. 
-      // Typically the front face occupies a specific rectangle in the texture atlas.
-      // Assuming a generic full-coverage mapping for the front face:
-      
-      // Google Core Colors
-      const gBlue = "#4285F4";
-      const gRed = "#DB4437";
-      const gYellow = "#F4B400";
-      const gGreen = "#0F9D58";
-      const gDark = "#1f2937"; // text-g-dark approx
+  useEffect(() => {
+    if (idTexture && idTexture.image) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 1024;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 1024, 1024);
 
-      // Draw Top Google Color Bar (Simulating the punch hole area/branding)
-      const barHeight = 80;
-      const sectionWidth = canvas.width / 4;
-      ctx.fillStyle = gBlue;   ctx.fillRect(0, 0, sectionWidth, barHeight);
-      ctx.fillStyle = gRed;    ctx.fillRect(sectionWidth, 0, sectionWidth, barHeight);
-      ctx.fillStyle = gYellow; ctx.fillRect(sectionWidth * 2, 0, sectionWidth, barHeight);
-      ctx.fillStyle = gGreen;  ctx.fillRect(sectionWidth * 3, 0, sectionWidth, barHeight);
+        // Calculate "contain" size to fit perfectly into half of the 1024x1024 canvas
+        const img = idTexture.image as HTMLImageElement;
+        const halfW = 512;
+        const fullH = 1024;
+        
+        // Add padding so the edges aren't eaten by the card bezel/curve
+        const padX = 20;
+        const padY = 40;
+        
+        const availW = halfW - padX * 2;
+        const availH = fullH - padY * 2;
+        
+        const scale = Math.min(availW / img.width, availH / img.height);
+        const drawW = img.width * scale;
+        const drawH = img.height * scale;
+        
+        // Center it inside the padded half
+        const drawX = padX + (availW - drawW) / 2;
+        const drawY = padY + (availH - drawH) / 2;
 
-      // Draw "Google Developer" or "MAKE WITH AI" Header
-      ctx.fillStyle = gDark;
-      ctx.font = "bold 60px Inter, sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("GOOGLE DEVELOPER", canvas.width / 2, 180);
+        // Draw Back (left half, mirrored)
+        ctx.save();
+        ctx.translate(512, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(img, drawX, drawY, drawW, drawH);
+        ctx.restore();
 
-      // Draw Avatar Placeholder (Circle)
-      const avatarY = 400;
-      ctx.beginPath();
-      ctx.arc(canvas.width / 2, avatarY, 150, 0, Math.PI * 2);
-      ctx.fillStyle = "#f3f4f6"; // Light gray bg
-      ctx.fill();
-      ctx.lineWidth = 10;
-      ctx.strokeStyle = gBlue;
-      ctx.stroke();
-      
-      // Draw Avatar Inner "G" or Icon logic (Simplified to a stylized letter)
-      ctx.fillStyle = gDark;
-      ctx.font = "bold 140px Inter, sans-serif";
-      ctx.fillText("G", canvas.width / 2, avatarY + 50);
+        // Draw Front (right half)
+        ctx.drawImage(img, 512 + drawX, drawY, drawW, drawH);
 
-      // Draw Name
-      ctx.fillStyle = gDark;
-      ctx.font = "bold 80px Inter, sans-serif";
-      ctx.fillText("MAKE WITH AI", canvas.width / 2, 700);
-
-      // Draw Title / Role
-      ctx.fillStyle = "#6b7280"; // gray-500
-      ctx.font = "50px Inter, sans-serif";
-      ctx.fillText("VIP PARTICIPANT", canvas.width / 2, 770);
-
-      // Draw Bottom Color Bar for extra Google feel
-      const bottomBarY = canvas.height - 40;
-      ctx.fillStyle = gGreen;  ctx.fillRect(0, bottomBarY, sectionWidth, 40);
-      ctx.fillStyle = gYellow; ctx.fillRect(sectionWidth, bottomBarY, sectionWidth, 40);
-      ctx.fillStyle = gRed;    ctx.fillRect(sectionWidth * 2, bottomBarY, sectionWidth, 40);
-      ctx.fillStyle = gBlue;   ctx.fillRect(sectionWidth * 3, bottomBarY, sectionWidth, 40);
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.flipY = false;
+        setDoubleSidedTexture(tex);
+      }
     }
-
-    // 3. Convert to THREE.CanvasTexture
-    const generatedTex = new THREE.CanvasTexture(canvas);
-    generatedTex.colorSpace = THREE.SRGBColorSpace;
-    generatedTex.flipY = false; // Important for GLTF standard UVs
-    return generatedTex;
-  }, []);
+  }, [idTexture]);
   // ---------------------------------------------
 
   useEffect(() => {
@@ -301,7 +274,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
           >
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial
-                map={googleIdTexture}
+                map={doubleSidedTexture || idTexture}
                 map-anisotropy={16}
                 clearcoat={isMobile ? 0 : 1}
                 clearcoatRoughness={0.15}

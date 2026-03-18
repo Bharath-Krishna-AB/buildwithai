@@ -5,15 +5,15 @@ import { motion } from "framer-motion";
 import { Gift, Cloud, CodeXml, Trophy } from "lucide-react";
 
 const perks = [
-  { icon: Gift, text: "Exclusive Event Stickers & Goodies", bg: "bg-g-light-yellow" },
-  { icon: Cloud, text: "$5 Google AI Credits for Every Team", bg: "bg-g-light-blue" },
-  { icon: CodeXml, text: "Intensive Hands-on Building", bg: "bg-g-light-green" },
-  { icon: Trophy, text: "Recognition from Ecosystem", bg: "bg-g-light-red" },
+  { icon: Gift, text: "Exclusive Event Stickers & Goodies", bg: "bg-g-yellow", iconColor: "text-g-yellow", textColor: "text-g-dark" },
+  { icon: Cloud, text: "$5 Google AI Credits for Every Team", bg: "bg-g-blue", iconColor: "text-g-blue", textColor: "text-white" },
+  { icon: CodeXml, text: "Intensive Hands-on Building", bg: "bg-g-green", iconColor: "text-g-green", textColor: "text-white" },
+  { icon: Trophy, text: "Recognition from Ecosystem", bg: "bg-g-red", iconColor: "text-g-red", textColor: "text-white" },
 ];
 
 export function WhatYouGet() {
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 border-y-4 border-g-dark bg-white relative overflow-hidden">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 border-y border-border bg-white relative overflow-hidden">
       
       {/* Decorative arrow pointing right */}
       <div className="absolute -right-20 top-20 opacity-10 hidden lg:block">
@@ -23,12 +23,12 @@ export function WhatYouGet() {
       </div>
 
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-16 items-center z-10 relative">
-        <div className="flex-1 bg-g-light-blue border-4 border-g-dark p-12 rounded-4xl shadow-brutal-lg">
+        <div className="flex-1 bg-g-blue border border-border p-12 rounded-2xl">
           <motion.h2 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="text-4xl sm:text-5xl font-bold tracking-tight mb-6 text-g-dark leading-tight"
+            className="text-4xl sm:text-5xl font-bold tracking-tight mb-6 text-white leading-tight"
           >
             What You Get
           </motion.h2>
@@ -37,7 +37,7 @@ export function WhatYouGet() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-g-dark text-xl leading-relaxed font-medium"
+            className="text-white/90 text-xl leading-relaxed font-medium"
           >
             Google pushes dev-first AI tooling heavily. We provide the resources, you bring the execution. Jumpstart your AI journey instantly.
           </motion.p>
@@ -53,12 +53,12 @@ export function WhatYouGet() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
-                className={`flex flex-col items-center text-center gap-4 p-8 rounded-2xl border-2 border-g-dark ${perk.bg} hover:shadow-brutal transition-all hover:-translate-y-1 group`}
+                className={`flex flex-col items-center text-center gap-4 p-8 rounded-2xl border border-border ${perk.bg} hover:brightness-110 transition-all group`}
               >
-                <div className="shrink-0 w-16 h-16 rounded-full border-2 border-g-dark bg-white flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Icon className="w-8 h-8 text-g-dark" strokeWidth={2.5} />
+                <div className="shrink-0 w-16 h-16 rounded-full border border-border bg-white flex items-center justify-center">
+                  <Icon className={`w-8 h-8 ${perk.iconColor}`} strokeWidth={2.5} />
                 </div>
-                <span className="font-bold text-lg text-g-dark">{perk.text}</span>
+                <span className={`font-bold text-lg ${perk.textColor}`}>{perk.text}</span>
               </motion.div>
             );
           })}

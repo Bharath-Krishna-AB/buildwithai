@@ -3,48 +3,37 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   
-  --color-g-light-red: #fbe8e6;
-  --color-g-light-green: #e7f4ea;
-  --color-g-light-gray: #f1f3f4;
-  --color-g-light-yellow: #fce7a5;
-  --color-g-light-blue: #c7ebf6;
-  --color-g-med-blue: #71c4fa;
+  /* Brand Colors */
   --color-g-blue: #3266dc;
   --color-g-red: #e34936;
   --color-g-green: #41a753;
   --color-g-yellow: #fbd52a;
+  
+  /* Dark / Strokes / Typography */
   --color-g-dark: #303030;
-
-  --shadow-brutal: 4px 4px 0px 0px var(--color-g-dark);
-  --shadow-brutal-lg: 8px 8px 0px 0px var(--color-g-dark);
-  --shadow-brutal-sm: 2px 2px 0px 0px var(--color-g-dark);
+  --color-border: #1e1e1e;
+  
+  /* Light Backgrounds */
+  --color-bg-white: #ffffff;
+  --color-g-light-gray: #f1f3f4;
+  --color-g-light-red: #fbe8e6;
+  --color-g-light-green: #e7f4ea;
+  --color-g-light-yellow: #fce7a5;
+  --color-g-light-blue: #c7ebf6;
+  --color-g-med-blue: #71c4fa;
 }
 
 @layer base {
   :root {
     --background: #ffffff;
-    --foreground: #303030;
+    --foreground: #1e1e1e;
   }
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  /* Optional dotted geometric background overlay */
-  background-image: radial-gradient(#303030 1px, transparent 1px);
-  background-size: 24px 24px;
-  background-position: -12px -12px;
-}
-
-/* Background class without dots if needed */
-.bg-mesh {
-  background-color: var(--color-g-light-gray);
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(213, 71%, 91%, 1) 0, transparent 50%), 
-    radial-gradient(at 100% 0%, hsla(350, 79%, 94%, 1) 0, transparent 50%), 
-    radial-gradient(at 50% 100%, hsla(133, 50%, 94%, 1) 0, transparent 50%);
-  background-attachment: fixed;
-  background-size: 100% 100vh;
+  /* Flat UI Rule: No background grids or gradients */
 }
 
 @keyframes pulse-slow {

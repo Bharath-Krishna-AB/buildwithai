@@ -18,15 +18,15 @@ export function Button({
   href,
   ...props
 }: ButtonProps) {
-  const baseStyles = "relative inline-flex items-center justify-center px-8 py-4 rounded-full font-bold tracking-wide transition-all duration-200 border-2 border-g-dark flex-shrink-0 cursor-pointer text-center";
+  const baseStyles = "relative inline-flex items-center justify-center px-8 py-4 rounded-full font-bold tracking-wide transition-colors duration-200 border border-border flex-shrink-0 cursor-pointer text-center";
   
   const variants = {
-    primary: "bg-g-dark text-white hover:-translate-y-1 hover:shadow-brutal",
-    secondary: "bg-white text-g-dark hover:-translate-y-1 hover:bg-g-light-gray hover:shadow-brutal",
-    yellow: "bg-g-yellow text-g-dark hover:-translate-y-1 hover:shadow-brutal",
-    blue: "bg-g-blue text-white hover:-translate-y-1 hover:shadow-brutal text-lg",
-    red: "bg-g-red text-white hover:-translate-y-1 hover:shadow-brutal",
-    green: "bg-g-green text-white hover:-translate-y-1 hover:shadow-brutal",
+    primary: "bg-g-dark text-white hover:bg-[#1a1a1a]",
+    secondary: "bg-white text-g-dark hover:bg-g-light-gray",
+    yellow: "bg-g-yellow text-g-dark hover:bg-[#eab308]",
+    blue: "bg-g-blue text-white hover:bg-[#2563eb] text-lg",
+    red: "bg-g-red text-white hover:bg-[#dc2626]",
+    green: "bg-g-green text-white hover:bg-[#16a34a]",
   };
 
   const content = (
@@ -35,24 +35,22 @@ export function Button({
 
   if (href) {
     return (
-      <motion.a
-        whileTap={{ scale: 0.98, translateY: 0, boxShadow: "0px 0px 0px 0px var(--color-g-dark)" }}
+      <a
         href={href}
         className={cn(baseStyles, variants[variant], className)}
         {...props}
       >
         {content}
-      </motion.a>
+      </a>
     );
   }
 
   return (
-    <motion.button
-      whileTap={{ scale: 0.98, translateY: 0, boxShadow: "0px 0px 0px 0px var(--color-g-dark)" }}
+    <button
       className={cn(baseStyles, variants[variant], className)}
       {...props}
     >
       {content}
-    </motion.button>
+    </button>
   );
 }

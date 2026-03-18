@@ -12,7 +12,7 @@ export function WhatIsThis() {
         className="relative"
       >
         {/* Decorative Pill like the reference */}
-        <div className="absolute -top-12 -left-4 md:-left-12 inline-flex items-center gap-4 bg-g-yellow border-2 border-g-dark rounded-full px-8 py-4 shadow-brutal z-10 -rotate-2">
+        <div className="absolute -top-12 -left-4 md:-left-12 inline-flex items-center gap-4 bg-white border border-border rounded-full px-8 py-4 z-10">
           <svg className="w-8 h-8 text-g-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="12" y1="2" x2="12" y2="22"></line>
             <line x1="2" y1="12" x2="22" y2="12"></line>
@@ -22,7 +22,7 @@ export function WhatIsThis() {
           <span className="text-2xl font-bold text-g-dark">What to expect</span>
         </div>
 
-        <div className="text-center bg-white rounded-3xl p-12 sm:p-24 border-2 border-g-dark shadow-brutal-lg">
+        <div className="text-center bg-white rounded-2xl p-12 sm:p-24 border border-border">
           <h2 className="text-3xl sm:text-5xl font-bold tracking-tight mb-8 text-g-dark leading-tight mt-6">
             A one-day AI hackathon.
           </h2>

@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 export function Partners() {
   return (
-    <section className="py-24 px-4 border-t-4 border-g-dark bg-white">
+    <section className="py-24 px-4 border-y border-border bg-white">
       <div className="max-w-4xl mx-auto text-center">
-        <div className="inline-block px-4 py-2 bg-g-light-gray border-2 border-g-dark font-bold text-sm tracking-widest uppercase mb-12 shadow-brutal-sm">
+        <div className="inline-block px-6 py-2 bg-g-light-gray border border-border rounded-full font-bold text-sm tracking-widest uppercase mb-12">
           In Collaboration With
         </div>
         <div className="flex flex-wrap items-center justify-center gap-12 sm:gap-24 opacity-80 hover:opacity-100 transition-all duration-300">
